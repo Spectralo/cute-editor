@@ -9,8 +9,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.16.16",
     "@astrojs/check": "^0.9.4",
+    "@iconify-json/mdi": "^1.2.1",
+    "astro": "^4.16.16",
+    "astro-icon": "^1.1.4",
+    "marked": "^15.0.3",
+    "material-symbols": "^0.27.1",
     "typescript": "^5.7.2"
   }
 }
