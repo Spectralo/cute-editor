@@ -6,99 +6,328 @@ interface Props {
   text: string;
 }
 
-const { text = "Type here ..." } = Astro.props;
+const { text } = Astro.props;
 ---
 
 <div class="container">
-    <textarea id="editor" spellcheck="false">{text}</textarea>
-    <div class="icon">
-        <Icon name="mdi:palette" size="2em" style="color: var(--text-color);" />
+  <textarea id="editor" spellcheck="false">{text}</textarea>
+  <div class="iconContainer">
+    <div class="icon" id="openPanel">
+      <Icon name="mdi:palette" size="2em" style="color: var(--text-color);" />
+    </div>
+    <div class="icon" id="cancel">
+      <Icon name="mdi:cancel" size="2em" style="color: var(--text-color);" />
+    </div>
+    <div class="icon" id="share">
+      <Icon name="mdi:share" size="2em" style="color: var(--text-color);" />
+    </div>
+  </div>
+</div>
+
+<div id="panel-share" class="panel hidden">
+    <div class="panel-content">
+    <button id="closePanelShare" class="close-btn">&times;</button>
+    <h1>Share your text :</h1>
+    <textarea id="shareText"></textarea>
     </div>
 </div>
 
+<div id="panel" class="panel hidden">
+  <div class="panel-content">
+    <button id="closePanel" class="close-btn">&times;</button>
+    <h2>Theming options</h2>
+    <div class="options">
+      <div class="option">
+        <p>Colorscheme :</p>
+        <select name="theme" id="theme">
+          <option value="catpuccin">Catpuccin</option>
+          <option value="catpuccinlight">Catpuccin Light</option>
+          <option value="gruvboxdark">Gruvbox</option>
+          <option value="gruvboxlight">Gruvbox Light</option>
+          <option value="nord">Nord</option>
+        </select>
+      </div>
+      <div class="option">
+        <label>Font : </label>
+        <select name="font" id="font">
+          <option value="Fira Code">Fira Code</option>
+          <option value="Courier New">Monospace</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-    h1 {
-        color: var(--text-color);
-    }
+  textarea {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 1.5em;
+    resize: none;
+  }
 
-    textarea {
-        background-color: var(--background-color);
-        color: var(--text-color);
-        width: 100%;
-        height: 100%;
-        border: none;
-        font-family: "Fira Code", monospace;
-        font-weight: 700;
-        font-size: 2em;
-        resize: none;
-    }
+  textarea:focus {
+    outline: none;
+  }
 
-    textarea:focus {
-        outline: none;
-    }
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
+    height: 96vh;
+    width: 98vw;
+    padding: 2vh 1vw;
+    background-color: var(--background-color);
+  }
 
-    .container {
-        display: flex;
-        flex-direction: row;
-        align-items: start;
-        justify-content: start;
-        height: 98vh;
-        width: 98vw;
-        padding-left: 1vw;
-        padding-right: 1vw;
-        padding-top: 1vh;
-        padding-bottom: 1vh;
-        background-color: var(--background-color);
-    }
+  .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.2em;
+    padding: 0.5em;
+    border-radius: 50%;
+    transition: background-color 100ms ease;
+  }
 
-    .header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
+  .icon:hover {
+    background-color: var(--surface-color);
+    cursor: pointer;
+  }
 
-    .icon {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0.2em;
-        padding: 0.5em;
-        border-radius: 50%;
-        transition: background-color 100ms ease;
-    }
+  .panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
-    .icon:hover {
-        background-color: var(--surface-color);
-        border-radius: 50%;
-        transition: background-color 100ms linear;
-        cursor: pointer;
-    }
+  .hidden {
+    display: none;
+  }
 
-    .header {
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
-    }
+  .panel-content {
+    background: var(--surface-color);
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    color: var(--text-color);
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--accent-color);
+  }
+
+  .close-btn:hover {
+    color: var(--text-color);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .option {
+    display: flex;
+    flex-direction: row;
+    margin: 0.2em;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
 
 <script>
-    import { marked } from "marked";
-    const editor = document.getElementById("editor") as HTMLTextAreaElement;
+  const editor = document.getElementById("editor");
+  const openPanelBtn = document.getElementById("openPanel");
+  const closePanelBtn = document.getElementById("closePanel");
+  const panel = document.getElementById("panel");
+  const themeSelect = document.getElementById("theme");
+  const eraseBtn = document.getElementById("cancel");
+  const fontSelect = document.getElementById("font");
+  const panel2 = document.getElementById("panel-share");
+  const shareBtn = document.getElementById("share");
+  const closePanelBtn2 = document.getElementById("closePanelShare");
+  const shareText = document.getElementById("shareText");
+
+  const themes = {
+    catpuccin: {
+      background: "#1e1e2e",
+      text: "#cdd6f4",
+      surface: "#2a2a3e",
+      accent: "#f9e2af",
+    },
+    catpuccinlight: {
+      background: "#eff1f5",
+      text: "#4c4f69",
+      surface: "#ccd0da",
+      accent: "#df8e1d",
+    },
+    gruvboxdark: {
+      background: "#282828",
+      text: "#ebdbb2",
+      surface: "#3c3836",
+      accent: "#fabd2f",
+    },
+    gruvboxlight: {
+      background: "#fbf1c7",
+      text: "#3c3836",
+      surface: "#ebdbb2",
+      accent: "#fabd2f",
+    },
+    nord: {
+      background: "#2e3440",
+      text: "#d8dee9",
+      surface: "#3b4252",
+      accent: "#88c0d0",
+    },
+  };
+
+  function applyTheme(background, text, surface, accent) {
+    document.documentElement.style.setProperty("--background-color", background);
+    document.documentElement.style.setProperty("--text-color", text);
+    document.documentElement.style.setProperty("--surface-color", surface);
+    document.documentElement.style.setProperty("--accent-color", accent);
+  }
+
+  function saveTheme(theme) {
+    document.cookie = "theme=" + theme;
+  }
+
+  if (editor) {
+    const value = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("text="))
+      ?.split("=")[1];
+
+    editor.value = value || editor.value;
 
     addEventListener("DOMContentLoaded", () => {
-        editor.focus();
+      editor.focus();
+      document.cookie = "text=" + editor.value;
+
     });
 
     editor.addEventListener("keydown", (e) => {
-        if (e.key === 'Tab') {
-            e.preventDefault();
-            const start = editor.selectionStart;
-            const end = editor.selectionEnd;
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
 
-            editor.value = editor.value.substring(0, start) +
-                "\t" + editor.value.substring(end);
+        editor.value =
+          editor.value.substring(0, start) +
+          "\t" +
+          editor.value.substring(end);
 
-            editor.selectionStart = editor.selectionEnd = start + 1;
-        }
+        editor.selectionStart = editor.selectionEnd = start + 1;
+      }
+
+      document.cookie = "text=" + editor.value;
     });
+    shareText.value = "http://localhost:4321/share?text="+btoa(editor.value);
+
+  }
+
+  if (openPanelBtn && closePanelBtn && panel) {
+    openPanelBtn.addEventListener("click", () => {
+      panel.classList.remove("hidden");
+    });
+
+    closePanelBtn.addEventListener("click", () => {
+      panel.classList.add("hidden");
+    });
+
+    panel.addEventListener("click", (e) => {
+      if (e.target === panel) {
+        panel.classList.add("hidden");
+      }
+    });
+  }
+
+  if (shareBtn && closePanelBtn2 && panel2) {
+    shareBtn.addEventListener("click", () => {
+      panel2.classList.remove("hidden");
+    });
+
+    closePanelBtn2.addEventListener("click", () => {
+      panel2.classList.add("hidden");
+    });
+
+    panel2.addEventListener("click", (e) => {
+      if (e.target === panel2) {
+        panel2.classList.add("hidden");
+      }
+    });
+  }
+
+  if (themeSelect) {
+    themeSelect.addEventListener("change", (e) => {
+      const theme = e.target.value;
+      const { background, text, surface, accent } = themes[theme];
+      applyTheme(background, text, surface, accent);
+      saveTheme(theme);
+    });
+
+    const theme = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("theme="))
+      ?.split("=")[1];
+
+    if (theme) {
+      themeSelect.value = theme;
+      const { background, text, surface, accent } = themes[theme];
+      applyTheme(background, text, surface, accent);
+    }
+  }
+
+  if (fontSelect) {
+    fontSelect.addEventListener("change", (e) => {
+      const font = e.target.value;
+      if (editor) {
+        editor.style.fontFamily = font;
+      }
+      document.cookie = "font=" + font;
+    });
+
+    const font = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("font="))
+      ?.split("=")[1];
+
+    if (font && editor) {
+      editor.style.fontFamily = font;
+    }
+  }
+
+  if (eraseBtn && editor) {
+    eraseBtn.addEventListener("click", () => {
+      editor.value = "";
+      document.cookie = "text=";
+      editor.focus();
+    });
+  }
 </script>

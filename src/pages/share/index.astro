@@ -1,0 +1,52 @@
+---
+const text = Astro.url.searchParams.get('text') || "";
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="container">
+    <textarea id="textArea">{text}</textarea>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 2em;
+    color: var(--text-color);
+    margin: 2em;
+  }
+  textarea {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 1.5em;
+    resize: none;
+  }
+
+  textarea:focus {
+    outline: none;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const text = new URLSearchParams(window.location.search).get('text') || "";
+
+    // Modern base64 decoding
+    const decodeBase64 = (str) => {
+      const decodedData = Uint8Array.from(atob(str), c => c.charCodeAt(0));
+      return new TextDecoder().decode(decodedData);
+    };
+
+    const realText = decodeBase64(text);
+    document.cookie = "text=" + realText;
+    document.getElementById('textArea').value = realText;
+    window.location.href = "/";
+  });
+</script>
