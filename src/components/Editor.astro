@@ -246,10 +246,9 @@ const { text } = Astro.props;
         editor.selectionStart = editor.selectionEnd = start + 1;
       }
 
+      shareText.value = "https://editor.spectralo.hackclub.app/share?text="+btoa(editor.value);
       document.cookie = "text=" + editor.value;
     });
-    shareText.value = "http://localhost:4321/share?text="+btoa(editor.value);
-
   }
 
   if (openPanelBtn && closePanelBtn && panel) {
