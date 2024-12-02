@@ -3,8 +3,8 @@
 # Cute Editor
 
 ![highseasbadge](https://img.shields.io/badge/made%20for%20high%20seas-FEC2FB?style=for-the-badge&logo=hackclub&logoColor=1C4188)
-![Astro](https://img.shields.io/badge/Astro-BC52EE?logo=astro&logoColor=fff)]
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)
+![Astro](https://img.shields.io/badge/Astro-BC52EE?logo=astro&logoColor=fff)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)
 
 This is a simple editor made with astro (even tough it could have been made in vanilla html, i only used 1 astro feature :/ ).
 You can create, edit and delete notes, and they will be saved in cookies. You can also change fonts and colorscheme.
