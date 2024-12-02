@@ -229,7 +229,7 @@ const { text } = Astro.props;
     addEventListener("DOMContentLoaded", () => {
       editor.focus();
       document.cookie = "text=" + editor.value;
-
+      shareText.value = "https://editor.spectralo.hackclub.app/share?text="+btoa(editor.value);
     });
 
     editor.addEventListener("keydown", (e) => {
